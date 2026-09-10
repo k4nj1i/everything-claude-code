@@ -4,6 +4,14 @@ This is a **production-ready AI coding plugin** providing 38 specialized agents,
 
 **Version:** 1.10.0
 
+## Task ownership and scope
+
+GitHub is the implementation source of truth. Where connected, use Linear for work orders/planning and Notion for durable decisions; do not make them mandatory for users of this distributed plugin. Read the current task and repository before applying generic workflow advice.
+
+One task has one implementation owner. Proceed independently on low-risk, reversible work within scope; prefer direct GitHub workflows over paid coding sessions when practical. Escalate unapproved product/creative, spending, release, security/privacy, destructive, production-data or hard-to-reverse decisions. Do not broaden a PR or merge without authorization. Explain the problem, change, impact, actual checks and remaining work in plain English with links.
+
+The workflows below apply where relevant to the task. Documentation-only edits do not require new application tests, unrelated security changes or a chain of specialist agents. Preserve this plugin's cross-platform and multi-harness support.
+
 ## Core Principles
 
 1. **Agent-First** — Delegate to specialized agents for domain tasks
@@ -45,7 +53,7 @@ This is a **production-ready AI coding plugin** providing 38 specialized agents,
 
 ## Agent Orchestration
 
-Use agents proactively without user prompt:
+When available and useful, use these specialist roles for bounded work under the task's implementation owner:
 - Complex feature requests → **planner**
 - Code just written/modified → **code-reviewer**
 - Bug fix or new feature → **tdd-guide**
@@ -54,7 +62,7 @@ Use agents proactively without user prompt:
 - Autonomous loops / loop monitoring → **loop-operator**
 - Harness config reliability and cost → **harness-optimizer**
 
-Use parallel execution for independent operations — launch multiple agents simultaneously.
+Parallelize independent work only when it reduces effort without duplicating ownership.
 
 ## Security Guidelines
 
@@ -68,9 +76,9 @@ Use parallel execution for independent operations — launch multiple agents sim
 - Rate limiting on all endpoints
 - Error messages don't leak sensitive data
 
-**Secret management:** NEVER hardcode secrets. Use environment variables or a secret manager. Validate required secrets at startup. Rotate any exposed secrets immediately.
+**Secret management:** NEVER hardcode secrets. Use environment variables or a secret manager. Validate required secrets at startup. Report exposed secrets without reproducing them; coordinate authorized rotation rather than changing live credentials unilaterally.
 
-**If security issue found:** STOP → use security-reviewer agent → fix CRITICAL issues → rotate exposed secrets → review codebase for similar issues.
+**If a security issue is found:** report its evidence and impact; use a security reviewer when available. Keep any fix within the authorized task and escalate live credential or permission changes.
 
 ## Coding Style
 
