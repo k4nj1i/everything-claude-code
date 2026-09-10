@@ -2,14 +2,9 @@
 
 This supplements the root `AGENTS.md` with Codex-specific guidance.
 
-## Model Recommendations
+## Model and capability selection
 
-| Task Type | Recommended Model |
-|-----------|------------------|
-| Routine coding, tests, formatting | GPT 5.4 |
-| Complex features, architecture | GPT 5.4 |
-| Debugging, refactoring | GPT 5.4 |
-| Security review | GPT 5.4 |
+Use the configured runtime default unless the task justifies a different available model. The reference `.codex/config.toml` deliberately leaves model/provider unset. Choose by task complexity, required tools and cost; do not assume a model name or capability is permanent.
 
 ## Skills Discovery
 
@@ -62,9 +57,9 @@ The sync script (`scripts/sync-ecc-to-codex.sh`) uses a Node-based TOML parser t
 
 ## Multi-Agent Support
 
-Codex now supports multi-agent workflows behind the experimental `features.multi_agent` flag.
+The repository's reference config enables `features.multi_agent` and defines roles below. Verify support in the active runtime; this file is not a guarantee that every installed version exposes the same features.
 
-- Enable it in `.codex/config.toml` with `[features] multi_agent = true`
+- Keep one implementation owner; use additional agents for bounded, independent work only when the task benefits from them
 - Define project-local roles under `[agents.<name>]`
 - Point each role at a TOML layer under `.codex/agents/`
 - Use `/agent` inside Codex CLI to inspect and steer child agents
@@ -74,23 +69,11 @@ Sample role configs in this repo:
 - `.codex/agents/reviewer.toml` — correctness/security review
 - `.codex/agents/docs-researcher.toml` — API and release-note verification
 
-## Key Differences from Claude Code
+## Runtime safety
 
-| Feature | Claude Code | Codex CLI |
-|---------|------------|-----------|
-| Hooks | 8+ event types | Not yet supported |
-| Context file | CLAUDE.md + AGENTS.md | AGENTS.md only |
-| Skills | Skills loaded via plugin | `.agents/skills/` directory |
-| Commands | `/slash` commands | Instruction-based |
-| Agents | Subagent Task tool | Multi-agent via `/agent` and `[agents.<name>]` roles |
-| Security | Hook-based enforcement | Instruction + sandbox |
-| MCP | Full support | Supported via `config.toml` and `codex mcp add` |
+Check the active runtime's advertised tools, hooks, approvals and sandbox before relying on them. Do not assume that installing these instructions enables a tool or enforces a security boundary.
 
-## Security Without Hooks
-
-Since Codex lacks hooks, security enforcement is instruction-based:
-1. Always validate inputs at system boundaries
-2. Never hardcode secrets — use environment variables
-3. Run `npm audit` / `pip audit` before committing
-4. Review `git diff` before every push
-5. Use `sandbox_mode = "workspace-write"` in config
+- Validate input at system boundaries and keep secrets out of code.
+- Review the diff before pushing; run checks relevant to the changed files.
+- Keep repository/user approval and sandbox controls intact.
+- `scripts/sync-ecc-to-codex.sh` can change global instructions, config and Git hooks. Inspect its `--dry-run` output first; applying it or using `--update-mcp` requires authorization for those settings changes. Do not run it as routine validation of a documentation edit.
