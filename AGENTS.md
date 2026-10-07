@@ -12,6 +12,10 @@ One task has one implementation owner. Proceed independently on low-risk, revers
 
 The workflows below apply where relevant to the task. Documentation-only edits do not require new application tests, unrelated security changes or a chain of specialist agents. Preserve this plugin's cross-platform and multi-harness support.
 
+## Delivery-unit rule
+
+For product, design, and creative work, prefer the **largest coherent, reversible, user-noticeable outcome that one implementation owner can carry end to end** over a chain of micro-tickets or tiny PRs. Give the owner the user problem, current product direction, immutable contracts, and success criteria; let them inspect the real system, choose the implementation, build it, test it, and open one reviewable PR. Existing architecture and UI defaults are starting points, not product decisions: keep them only when they fit the documented product. Use small follow-up tasks mainly for cleanup, regressions, contained correctness fixes, or work that is genuinely blocked. Review broad passes adversarially against user experience, security, semantics, invariants, and actual checks rather than whether the implementation matched a pre-imagined solution.
+
 ## Core Principles
 
 1. **Agent-First** — Delegate to specialized agents for domain tasks
