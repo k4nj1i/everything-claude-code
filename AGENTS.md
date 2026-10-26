@@ -4,6 +4,10 @@ This is a **production-ready AI coding plugin** providing 38 specialized agents,
 
 **Version:** 1.10.0
 
+## Maintainer usage note — Steven OS, 26 October 2026
+
+When maintaining this repository for Steven, apply the [current Steven OS Team Rules](https://app.notion.com/p/404be283a38481069a11cc596e15e328): ChatGPT owns project priorities and brief sign-off; Claude is lead developer; Kai coordinates operations, while specialists work in their assigned domains. Give one accountable owner freedom to deliver a coherent, reversible outcome inside the approved vision. Prefer fewer reviewed PRs with several purposeful commits over disconnected micro-PRs. An authorised team agent may merge once independent review, latest-head checks and repository protections permit it; Steven is not the routine reviewer. Preserve safety, security, spending, release and database approval gates. This maintainer guidance does not change the generic behavior of the distributed plugin for other users.
+
 ## Task ownership and scope
 
 GitHub is the implementation source of truth. Where connected, use Linear for work orders/planning and Notion for durable decisions; do not make them mandatory for users of this distributed plugin. Read the current task and repository before applying generic workflow advice.
@@ -11,10 +15,6 @@ GitHub is the implementation source of truth. Where connected, use Linear for wo
 One task has one implementation owner. Proceed independently on low-risk, reversible work within scope; prefer direct GitHub workflows over paid coding sessions when practical. Escalate unapproved product/creative, spending, release, security/privacy, destructive, production-data or hard-to-reverse decisions. Do not broaden a PR or merge without authorization. Explain the problem, change, impact, actual checks and remaining work in plain English with links.
 
 The workflows below apply where relevant to the task. Documentation-only edits do not require new application tests, unrelated security changes or a chain of specialist agents. Preserve this plugin's cross-platform and multi-harness support.
-
-## Delivery-unit rule
-
-For product, design, and creative work, prefer the **largest coherent, reversible, user-noticeable outcome that one implementation owner can carry end to end** over a chain of micro-tickets or tiny PRs. Give the owner the user problem, current product direction, immutable contracts, and success criteria; let them inspect the real system, choose the implementation, build it, test it, and open one reviewable PR. Existing architecture and UI defaults are starting points, not product decisions: keep them only when they fit the documented product. Use small follow-up tasks mainly for cleanup, regressions, contained correctness fixes, or work that is genuinely blocked. Review broad passes adversarially against user experience, security, semantics, invariants, and actual checks rather than whether the implementation matched a pre-imagined solution.
 
 ## Delivery-unit rule
 
