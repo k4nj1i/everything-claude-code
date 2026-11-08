@@ -4,9 +4,9 @@ This is a **production-ready AI coding plugin** providing 38 specialized agents,
 
 **Version:** 1.10.0
 
-## Maintainer usage note — Steven OS, 26 October 2026
+## Maintainer usage note — Pulse, 8 November 2026
 
-When maintaining this repository for Steven, apply the [current Steven OS Team Rules](https://app.notion.com/p/404be283a38481069a11cc596e15e328): ChatGPT owns project priorities and brief sign-off; Claude is lead developer; Kai coordinates operations, while specialists work in their assigned domains. Give one accountable owner freedom to deliver a coherent, reversible outcome inside the approved vision. Prefer fewer reviewed PRs with several purposeful commits over disconnected micro-PRs. An authorised team agent may merge once independent review, latest-head checks and repository protections permit it; Steven is not the routine reviewer. Preserve safety, security, spending, release and database approval gates. This maintainer guidance does not change the generic behavior of the distributed plugin for other users.
+When maintaining this repository for Steven, apply the [current Steven OS Team Rules](https://app.notion.com/p/404be283a38481069a11cc596e15e328): ChatGPT is accountable for studio delivery; Claude handles delegated complex work and independent reviews; Codex scoped engineering; Antigravity verified PC/specialist tasks; Kai operations; Ribby Rift QA; QQ delegated Quit Quest tasks. These are studio roles, not new defaults for external users of this reusable plugin. Give one accountable owner freedom to deliver a coherent, reversible outcome inside the approved vision. Prefer fewer reviewed PRs with several purposeful commits over disconnected micro-PRs. An authorised team agent may merge once independent review, latest-head checks and repository protections permit it; Steven is not the routine reviewer. Preserve safety, security, spending, release and database approval gates. For the studio, do not multiply code reviewers, security agents, test runners or planning gates on routine low-risk changes; use exactly the required checks and one independent review where repo policy or risk requires it. Reuse existing evidence and avoid paid model summons and extra Actions runs. This maintainer guidance does not change the generic behavior of the distributed plugin for other users.
 
 ## Task ownership and scope
 
