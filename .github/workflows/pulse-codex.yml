@@ -1,0 +1,73 @@
+# Pulse Codex GitHub assistant. Disabled until owner approves spend and configures OPENAI_API_KEY.
+# Enable with repository variable PULSE_CODEX_ENABLED=true only after approval.
+# Invoke via @codex on an issue, or Actions > Pulse Codex > Run workflow.
+name: Pulse Codex (on demand)
+
+on:
+  issue_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  workflow_dispatch:
+    inputs:
+      task:
+        description: Task for Codex
+        required: true
+        type: string
+
+concurrency:
+  group: pulse-codex-${{ github.event.issue.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  codex:
+    if: >-
+      vars.PULSE_CODEX_ENABLED == 'true' &&
+      (
+        (github.event_name == 'workflow_dispatch' && github.actor == 'k4nj1i') ||
+        (github.event_name == 'issue_comment' &&
+          !github.event.issue.pull_request &&
+          contains(github.event.comment.body, '@codex') &&
+          (github.actor == 'k4nj1i' ||
+            contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))) ||
+        (github.event_name == 'issues' &&
+          (contains(github.event.issue.body, '@codex') || contains(github.event.issue.title, '@codex')) &&
+          (github.actor == 'k4nj1i' ||
+            contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)))
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Run Codex
+        id: codex
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          permission-profile: ":workspace"
+          prompt: |
+            You are the Pulse Codex coding agent for ${{ github.repository }}.
+            Read AGENTS.md and project instructions first. Follow repository Team rules, security,
+            privacy, independent-review and publishing rules. Never spend, merge, deploy,
+            edit production data, or access secrets. Make a minimal tested change only if
+            the requested task warrants one; otherwise explain what is needed.
+            Task:
+            ${{ github.event_name == 'workflow_dispatch' && inputs.task || github.event_name == 'issue_comment' && github.event.comment.body || github.event.issue.body }}
+      - name: Open a reviewable PR if files changed
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.PULSE_PR_TOKEN || github.token }}
+          branch: pulse/codex-${{ github.run_id }}
+          base: ${{ github.event.repository.default_branch }}
+          commit-message: "chore: Codex proposed changes"
+          title: "Codex: proposed change from issue #${{ github.event.issue.number }}"
+          body: |
+            Made by: OpenAI Codex (Pulse on-demand workflow).
+            Source issue: #${{ github.event.issue.number }}
+            Requires normal independent review and passing CI. No automatic merge.
+          delete-branch: false
