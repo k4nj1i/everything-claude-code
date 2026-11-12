@@ -1,0 +1,73 @@
+# Pulse Qwen GitHub assistant. Disabled until owner verifies a no-cost allowance
+# or explicitly approves API usage, configures QWEN_API_KEY and enables PULSE_QWEN_ENABLED.
+# Invoke via @qwencoder on an issue, or Actions > Pulse Qwen > Run workflow.
+name: Pulse Qwen (on demand)
+
+on:
+  issue_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  workflow_dispatch:
+    inputs:
+      task:
+        description: Task for Qwen
+        required: true
+        type: string
+
+concurrency:
+  group: pulse-qwen-${{ github.event.issue.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  qwen:
+    if: >-
+      vars.PULSE_QWEN_ENABLED == 'true' &&
+      (
+        (github.event_name == 'workflow_dispatch' && github.actor == 'k4nj1i') ||
+        (github.event_name == 'issue_comment' &&
+          !github.event.issue.pull_request &&
+          contains(github.event.comment.body, '@qwencoder') &&
+          (github.actor == 'k4nj1i' ||
+            contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association))) ||
+        (github.event_name == 'issues' &&
+          (contains(github.event.issue.body, '@qwencoder') || contains(github.event.issue.title, '@qwencoder')) &&
+          (github.actor == 'k4nj1i' ||
+            contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.issue.author_association)))
+      )
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Run Qwen Code
+        id: qwen
+        uses: QwenLM/qwen-code-action@v1
+        with:
+          openai_api_key: ${{ secrets.QWEN_API_KEY }}
+          prompt: |
+            You are the Pulse Qwen coding agent for ${{ github.repository }}.
+            Read AGENTS.md and project instructions before working. Follow Team rules,
+            privacy and security constraints. Never send athlete data, production secrets,
+            or protected user data to external services. Do not merge, publish,
+            change production databases, or initiate spending. Make a contained tested
+            code change only if requested, then explain the outcome and gaps.
+            Task:
+            ${{ github.event_name == 'workflow_dispatch' && inputs.task || github.event_name == 'issue_comment' && github.event.comment.body || github.event.issue.body }}
+      - name: Open a reviewable PR if files changed
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.PULSE_PR_TOKEN || github.token }}
+          branch: pulse/qwen-${{ github.run_id }}
+          base: ${{ github.event.repository.default_branch }}
+          commit-message: "chore: Qwen proposed changes"
+          title: "Qwen: proposed change from issue #${{ github.event.issue.number || 'manual' }}"
+          body: |
+            Made by: Qwen Code (Pulse on-demand workflow).
+            Source: issue #${{ github.event.issue.number || 'manual invocation' }}.
+            Requires normal independent review and passing CI. No automatic merge.
+          delete-branch: false
