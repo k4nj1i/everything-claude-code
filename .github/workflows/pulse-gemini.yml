@@ -1,0 +1,71 @@
+# Pulse Gemini issue coding agent. Does not use Google AI Pro/Ultra consumer login.
+# Requires an explicitly approved Gemini API key and PULSE_GEMINI_ENABLED=true.
+# Disabled by default. No scheduled or automatic model runs.
+# Invoke as @gemini-cli on an issue or through Actions > Pulse Gemini > Run workflow.
+name: Pulse Gemini (on demand)
+
+on:
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      task:
+        description: "Task for Gemini (avoid private/personal data)"
+        required: true
+        type: string
+
+concurrency:
+  group: pulse-gemini-${{ github.event.issue.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  gemini:
+    if: >-
+      vars.PULSE_GEMINI_ENABLED == 'true' &&
+      (
+        (github.event_name == 'workflow_dispatch' && github.actor == 'k4nj1i') ||
+        (github.event_name == 'issue_comment' &&
+          !github.event.issue.pull_request &&
+          contains(github.event.comment.body, '@gemini-cli') &&
+          (github.actor == 'k4nj1i' ||
+           contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association)))
+      )
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Run Gemini coding task
+        uses: google-github-actions/run-gemini-cli@v0.1.14
+        with:
+          gemini_api_key: ${{ secrets.GEMINI_API_KEY }}
+          prompt: |
+            You are the Pulse Gemini coding agent in ${{ github.repository }}.
+            Read AGENTS.md, the project's rules, and relevant docs before editing.
+            Respect the current team ownership and change-control rules.
+            Don't use or expose production secrets, private athlete/personal data,
+            unreleased confidential evidence, or privileged credentials.
+            Work only on the user-specified issue. Keep changes reversible.
+            Never merge, publish, deploy, make production data changes, alter
+            access controls, or initiate a paid service. Run relevant local tests
+            where feasible and state clearly which checks were not run.
+            Task:
+            ${{ github.event_name == 'workflow_dispatch' && inputs.task || github.event.comment.body }}
+      - name: Create reviewable pull request for code changes
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.PULSE_PR_TOKEN || github.token }}
+          base: ${{ github.event.repository.default_branch }}
+          branch: pulse/gemini-${{ github.run_id }}
+          commit-message: "chore: Gemini proposed changes"
+          title: "Gemini: proposed change from issue #${{ github.event.issue.number || 'manual' }}"
+          body: |
+            Made by: Gemini (Pulse on-demand coding workflow).
+            Origin: issue #${{ github.event.issue.number || 'manual' }}.
+            Not verified on a real device. Requires normal independent review
+            and passing CI before any merge. No automatic deployment.
