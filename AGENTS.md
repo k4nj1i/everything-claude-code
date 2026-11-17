@@ -1,12 +1,15 @@
 # Everything Claude Code (ECC) — Agent Instructions
 
+## No personal names
+Do not write the owner's name or other personal details into any repo file, commit message, PR description, issue or code comment where it can be avoided; say "the owner" instead. The GitHub username k4nj1i is fine.
+
 This is a **production-ready AI coding plugin** providing 38 specialized agents, 158 skills, 72 commands, and automated hook workflows for software development.
 
 **Version:** 1.10.0
 
-## Maintainer usage note — Steven OS, 26 October 2026
+## Maintainer usage note — Team rules, 26 October 2026
 
-When maintaining this repository for Steven, apply the [current Steven OS Team Rules](https://app.notion.com/p/404be283a38481069a11cc596e15e328): ChatGPT owns project priorities and brief sign-off; Claude is lead developer; Kai coordinates operations, while specialists work in their assigned domains. Give one accountable owner freedom to deliver a coherent, reversible outcome inside the approved vision. Prefer fewer reviewed PRs with several purposeful commits over disconnected micro-PRs. An authorised team agent may merge once independent review, latest-head checks and repository protections permit it; Steven is not the routine reviewer. Preserve safety, security, spending, release and database approval gates. This maintainer guidance does not change the generic behavior of the distributed plugin for other users.
+When maintaining this repository for the owner, apply the [current Team rules](https://app.notion.com/p/404be283a38481069a11cc596e15e328): ChatGPT owns project priorities and brief sign-off; Claude is lead developer; Kai coordinates operations, while specialists work in their assigned domains. Give one accountable owner freedom to deliver a coherent, reversible outcome inside the approved vision. Prefer fewer reviewed PRs with several purposeful commits over disconnected micro-PRs. An authorised team agent may merge once independent review, latest-head checks and repository protections permit it; the owner is not the routine reviewer. Preserve safety, security, spending, release and database approval gates. This maintainer guidance does not change the generic behavior of the distributed plugin for other users.
 
 ## Task ownership and scope
 
